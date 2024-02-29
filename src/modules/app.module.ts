@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from '../app.controller';
 import { AppService } from '../app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/entities/user.entity';
+import { Auction } from 'src/entities/auction.entity';
+import { Bid } from 'src/entities/bid.entity';
 
 @Module({
   imports: [
@@ -12,7 +15,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'postgres',
       password: 'postgres',
       database: 'skillupmentor_project1',
-      entities: [],
+      entities: [
+        User,
+        Auction,
+        Bid,
+      ],
       synchronize: true // NEVER USE IN PRODUCTION!
     })
   ],
