@@ -3,7 +3,7 @@ import { Base } from "./base.entity";
 import { User } from "./user.entity";
 import { Auction } from "./auction.entity";
 
-enum BidStatus {
+export enum BidStatus {
     Winning = 'Winning',
     Outbid = 'Outbid'
 }
