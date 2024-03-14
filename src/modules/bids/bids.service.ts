@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AbstractService } from '../common/abstract.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Bid } from 'src/entities/bid.entity';
 import { Repository } from 'typeorm';
 import { CreateBidDto } from './dto/create-bid.dto';
 import { UpdateBidDto } from './dto/update-bid.dto';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class BidsService extends AbstractService{
@@ -38,6 +39,31 @@ export class BidsService extends AbstractService{
             console.error(error)
             throw new BadRequestException('Something went wrong while updating the bid.')
         }
+    }
+
+    // GET USER'S BID HISTORY
+    async getBidHistory(userId: string): Promise<Bid[]> {
+
+        // pridobi vse bide za enga userja
+        const bids = await this.bidsRepository.find({where: {bidder: {id: userId}}})
+
+        if(!bids || bids.length == 0) {
+            throw new NotFoundException(`No bids were found for user with id: ${userId}`)
+        }
+
+        return bids
+    }
+
+    async getBidsForAuction(auctionId: string): Promise<Bid[]> {
+
+        // pridobi vse bide za en auction
+        const bids = await this.bidsRepository.find({where: {auction: {id: auctionId}}})
+
+        if(!bids || bids.length == 0) {
+            throw new NotFoundException(`No bids were found for auction with id: ${auctionId}`)
+        }
+
+        return bids
     }
 
 }

@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     // LOGIN USER
-    async login(loginUserDto: LoginUserDto): Promise<void> {
+    async login(loginUserDto: LoginUserDto): Promise<User> {
         const {email, password} = loginUserDto
 
         // find user by email
@@ -42,6 +42,8 @@ export class AuthService {
 
         // access token
         const accessToken = this.generateToken(user)
+
+        return user
     }
 
     // GENERATE TOKEN

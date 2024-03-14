@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AbstractService } from '../common/abstract.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Auction } from 'src/entities/auction.entity';
@@ -45,10 +45,24 @@ export class AuctionsService extends AbstractService {
 
     // UPDATE AUCTION PRODUCT IMAGE
     async updateAuctionImage(id: string, image: string): Promise<Auction> {
+
         // find auction by id
         const auction = (await this.findById(id)) as Auction
 
         return this.update(auction.id, {...auction, image})
+    }
+
+    // GET ALL AUCTIONS FOR A SPECIFIC USER
+    async getAuctionsForUser(userId: string): Promise<Auction[]> {
+
+        // find auctions for user with userId
+        const auctions = await this.auctionsRepository.find({where: {auction_creator: {id: userId}}})
+
+        if(!auctions || auctions.length == 0) {
+            throw new NotFoundException('No auctions were found for that user.')
+        }
+
+        return auctions
     }
 
 }
