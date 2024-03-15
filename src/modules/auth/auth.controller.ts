@@ -46,7 +46,7 @@ export class AuthController {
 
     // GET CURRENT USER
     @UseGuards(JwtAuthGuard)
-    @Get()
+    @Get('me')
     @HttpCode(HttpStatus.OK)
     async getCurrentUser(@Req() request: RequestWithUser): Promise<UserData> {
         const user = await request.user
